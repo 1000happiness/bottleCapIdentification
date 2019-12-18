@@ -1,0 +1,87 @@
+#mainHeader{
+    padding-left: 0px;
+    padding-right: 0px;
+    background-color: #97cbff;
+}
+
+#mainHeaderText{
+    color: black;
+}
+
+#mainHeader{
+    text-align: center;
+}
+
+#mainFooter{
+    text-align: center;
+}
+
+#mainText{
+    text-align: center;
+}
+
+#buttonRow{
+    text-align: center;
+    padding-top: 20px;
+    background-color: white;
+}
+
+#buttonCol{
+    text-align: center;
+}
+
+#discriptionRow{
+    padding-top: 25px;
+    background-color: white;
+}
+
+#outputButtonCol{
+    text-align: center;
+}
+
+#inputButtonCol{
+    text-align: center;
+}
+
+#imageRow{
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background-color: white;
+    text-align: center;
+}
+
+#inputImageCol{
+    text-align: center;
+}
+
+#outputImageCol{
+    text-align: center;
+}
+
+
+#labeledDataRow{
+    padding-top: 25px;
+    background-color: white;
+}
+
+
+#imageDiv{
+    margin:0 auto;
+    border-style: solid;
+    text-align: center;
+    width: 506px;
+    height: 506px;
+}
+
+#imageAvatar{
+    border-style: solid;
+}
+
+#mainFooter{
+    background-color: white;
+}
+
+#labeledDataDiv{
+    margin:0 auto;
+    width: 1200px;
+}
