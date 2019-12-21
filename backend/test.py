@@ -13,10 +13,10 @@ class GUI(tk.Frame):
     #model
     imgModel = None
 
-    inputImagePath = ""
+    inputImgPath = "test.png"
 
-    imageWidth = 480
-    imageHeight = 270
+    imgWidth = 480
+    imgHeight = 270
     
     def __init__(self, master, imgModel):
         super().__init__(master, width=1000, height=1000)
@@ -24,15 +24,15 @@ class GUI(tk.Frame):
         self.pack()
 
         #选择图片路径
-        self.selectInputImagePathButtonText = tk.StringVar()
-        self.selectInputImagePathButtonText.set("请选择图片路径")
-        self.selectInputImagePathButton = tk.Button(self, textvariable=self.selectInputImagePathButtonText, command=self.__selectIamge)
-        self.selectInputImagePathButton.grid(row = 0, column = 0, padx = 10, pady = 10)
+        self.selectInputImgPathButtonText = tk.StringVar()
+        self.selectInputImgPathButtonText.set("请选择图片路径")
+        self.selectInputImgPathButton = tk.Button(self, textvariable=self.selectInputImgPathButtonText, command=self.__selectIamge)
+        self.selectInputImgPathButton.grid(row = 0, column = 0, padx = 10, pady = 10)
 
-        self.selectInputImagePathEntryText = tk.StringVar()
-        self.selectInputImagePathEntryText.set("")
-        self.selectInputImagePathEntry = tk.Entry(self, textvariable=self.selectInputImagePathEntryText, width = 30)
-        self.selectInputImagePathEntry.grid(row = 0, column = 1, columnspan = 2, padx = 10, pady = 10)
+        self.selectInputImgPathEntryText = tk.StringVar()
+        self.selectInputImgPathEntryText.set("")
+        self.selectInputImgPathEntry = tk.Entry(self, textvariable=self.selectInputImgPathEntryText, width = 30)
+        self.selectInputImgPathEntry.grid(row = 0, column = 1, columnspan = 2, padx = 10, pady = 10)
 
         #处理函数选择
         self.functionButtonList = []
@@ -57,25 +57,25 @@ class GUI(tk.Frame):
             self.argsEntryList.append(tk.Entry(self, textvariable = temp, width = 3).grid(row = 1, column = 2 * i + 1, sticky="W"))
 
         #显示图片
-        self.selectInputImagePathLabelText = tk.StringVar()
-        self.selectInputImagePathLabelText.set("输入图片")
-        self.selectInputImagePathLabel = tk.Label(self, textvariable=self.selectInputImagePathLabelText)
-        self.selectInputImagePathLabel.grid(row = 5, column = 0)
+        self.selectInputImgPathLabelText = tk.StringVar()
+        self.selectInputImgPathLabelText.set("输入图片")
+        self.selectInputImgPathLabel = tk.Label(self, textvariable=self.selectInputImgPathLabelText)
+        self.selectInputImgPathLabel.grid(row = 5, column = 0)
 
-        self.pilInputImage = Image.fromarray(np.zeros((self.imageHeight, self.imageWidth))).convert("L")
-        self.tkInputImage = ImageTk.PhotoImage(image=self.pilInputImage)
-        self.inputImageLabel = tk.Label(self, image=self.tkInputImage)
-        self.inputImageLabel.grid(row = 6, column = 0, columnspan = 6)
+        self.pilInputImg = Image.fromarray(np.zeros((self.imgHeight, self.imgWidth)))
+        self.tkInputImg = ImageTk.PhotoImage(image=self.pilInputImg)
+        self.inputImgLabel = tk.Label(self, image=self.tkInputImg)
+        self.inputImgLabel.grid(row = 6, column = 0, columnspan = 6)
 
-        self.selectOutputImagePathLabelText = tk.StringVar()
-        self.selectOutputImagePathLabelText.set("处理后图片")
-        self.selectOutputImagePathLabel = tk.Label(self, textvariable=self.selectOutputImagePathLabelText)
-        self.selectOutputImagePathLabel.grid(row = 5, column = 6)
+        self.selectOutputImgPathLabelText = tk.StringVar()
+        self.selectOutputImgPathLabelText.set("处理后图片")
+        self.selectOutputImgPathLabel = tk.Label(self, textvariable=self.selectOutputImgPathLabelText)
+        self.selectOutputImgPathLabel.grid(row = 5, column = 6)
 
-        self.pilOutputImage = Image.fromarray(np.zeros((self.imageHeight, self.imageWidth))).convert("L")
-        self.tkOutputImage = ImageTk.PhotoImage(image=self.pilOutputImage)
-        self.outputImageLabel = tk.Label(self, image=self.tkOutputImage)
-        self.outputImageLabel.grid(row = 6, column = 6, columnspan = 6)
+        self.pilOutputImg = Image.fromarray(np.zeros((self.imgHeight, self.imgWidth)))
+        self.tkOutputImg = ImageTk.PhotoImage(image=self.pilOutputImg)
+        self.outputImgLabel = tk.Label(self, image=self.tkOutputImg)
+        self.outputImgLabel.grid(row = 6, column = 6, columnspan = 6)
 
         
 
@@ -83,43 +83,43 @@ class GUI(tk.Frame):
     def __selectIamge(self):
         filePath = filedialog.askopenfilename()
         if(filePath != ""):
-            self.inputImagePath = filePath
-            self.selectInputImagePathEntryText.set(filePath)
+            self.inputImgPath = filePath
+            self.selectInputImgPathEntryText.set(filePath)
 
-            self.pilInputImage = Image.open(self.inputImagePath).convert("L")
-            self.pilInputImage = self.__resize(self.pilInputImage, self.imageWidth, self.imageHeight)
-            self.imgModel.setPilImage(self.pilInputImage)
-            self.tkInputImage = ImageTk.PhotoImage(image=self.pilInputImage)
-            self.inputImageLabel = tk.Label(self, image=self.tkInputImage)
-            self.inputImageLabel.grid(row = 6, column = 0, columnspan = 6)
+            self.pilInputImg = Image.open(self.inputImgPath)
+            self.pilInputImg = self.__resize(self.pilInputImg, self.imgWidth, self.imgHeight)
+            self.imgModel.setPilImg(self.pilInputImg)
+            self.tkInputImg = ImageTk.PhotoImage(image=self.pilInputImg)
+            self.inputImgLabel = tk.Label(self, image=self.tkInputImg)
+            self.inputImgLabel.grid(row = 6, column = 0, columnspan = 6)
             
 
-            self.pilOutputImage = Image.fromarray(np.zeros((self.imageHeight, self.imageWidth))).convert("L")
-            self.tkOutputImage = ImageTk.PhotoImage(image=self.pilOutputImage)
-            self.outputImageLabel = tk.Label(self, image=self.tkOutputImage)
-            self.outputImageLabel.grid(row = 6, column = 6, columnspan = 6)
+            self.pilOutputImg = Image.fromarray(np.zeros((self.imgHeight, self.imgWidth)))
+            self.tkOutputImg = ImageTk.PhotoImage(image=self.pilOutputImg)
+            self.outputImgLabel = tk.Label(self, image=self.tkOutputImg)
+            self.outputImgLabel.grid(row = 6, column = 6, columnspan = 6)
         else:
-            self.pilOutputImage = Image.fromarray(np.zeros((self.imageHeight, self.imageWidth))).convert("L")
-            self.tkOutputImage = ImageTk.PhotoImage(image=self.pilOutputImage)
-            self.outputImageLabel = tk.Label(self, image=self.tkOutputImage)
-            self.outputImageLabel.grid(row = 6, column = 6, columnspan = 6)
+            self.pilOutputImg = Image.fromarray(np.zeros((self.imgHeight, self.imgWidth)))
+            self.tkOutputImg = ImageTk.PhotoImage(image=self.pilOutputImg)
+            self.outputImgLabel = tk.Label(self, image=self.tkOutputImg)
+            self.outputImgLabel.grid(row = 6, column = 6, columnspan = 6)
         
         return filePath
 
     def __getResult(self):
         self.imgModel.identify()
-        self.tkOutputImage = ImageTk.PhotoImage(image=imgModel.getPilImage())
-        self.outputImageLabel = tk.Label(self, image=self.tkOutputImage)
-        self.outputImageLabel.grid(row = 6, column = 6, columnspan = 6)
+        self.tkOutputImg = ImageTk.PhotoImage(image=imgModel.getPilImg())
+        self.outputImgLabel = tk.Label(self, image=self.tkOutputImg)
+        self.outputImgLabel.grid(row = 6, column = 6, columnspan = 6)
         return 
 
-    def __resize(self, pilImage, width, height):
-        widthRate = pilImage.size[0] / width
-        heightRate = pilImage.size[1] / height
+    def __resize(self, pilImg, width, height):
+        widthRate = pilImg.size[0] / width
+        heightRate = pilImg.size[1] / height
         rate = max(widthRate, heightRate)
-        pilImage = pilImage.resize((int(pilImage.size[0] / rate), int(pilImage.size[1] / rate)))
+        pilImg = pilImg.resize((int(pilImg.size[0] / rate), int(pilImg.size[1] / rate)))
 
-        return pilImage
+        return pilImg
 
 
 if __name__ == "__main__":
