@@ -23,20 +23,21 @@ class ImgModel:
     def __init__(self):
         self.identifyModel = IdentifyModel()
 
-    def setBase64Image(self, base64Img):
+    def setBase64Img(self, base64Img):
         self.base64Img = base64Img
     
-    def getResultbase64Image(self):
+    def getResultbase64Img(self):
         return self.base64Img
 
-    def setPilImage(self, pilImg):
+    def setPilImg(self, pilImg):
         self.pilImg = pilImg
     
-    def getPilImage(self):
+    def getPilImg(self):
         return self.pilImg
  
     def identify(self):
         self.pilImg, identifyList = self.identifyModel.identify(self.pilImg)
         print(identifyList)
 
-    
+    def __preProcess(self):
+        pass
