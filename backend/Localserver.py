@@ -1,19 +1,22 @@
 from tornado import ioloop
 from tornado import web
 from json import loads
+from base64 import b64encode
 
 class CapIdentificationHandler(web.RequestHandler):
     def initialize(self, imgModel):
         self.imgModel = imgModel
 
     def post(self):
-        args = loads(self.request.body.decode("utf-8"))
+        args = self.request.body
+        
+        args = args[args.find(b"image/jpeg\r\n\r\n") + 14 : -1]
+        self.imgModel.setBase64Image(b64encode(args))
 
-        self.imgModel.setImg(args["image"])
-        identifiedImg = self.imgModel.getImg()
+        self.write("{\"success\": true}")
 
-        self.write("{success: true,")
-        self.write("{image:" + identifiedImg)
+    def get(self):
+        self.write(self.imgModel.getResultbase64Image())
 
 class Localserver:
     #image model
@@ -25,7 +28,8 @@ class Localserver:
     def run(self):
         print("The local server is running in", 8000, "port")
         app = web.Application([
-            (r"/cap_identification", CapIdentificationHandler, {"IOT_model": self.imgModel}),  # 注册路由
+            (r"/setImage", CapIdentificationHandler, {"imgModel": self.imgModel}),  # 注册路由
+            (r"/getImage", CapIdentificationHandler, {"imgModel": self.imgModel}),
         ])
         app.listen(8000)
         ioloop.IOLoop.current().start()
