@@ -3,15 +3,8 @@ import math
 
 from copy import deepcopy
 from PIL import Image
-from threading import Thread
 
 from IdentifyModel import IdentifyModel
-
-def async(f):
-    def wrapper(*args, **kwargs):
-        thr = Thread(target = f, args = args, kwargs = kwargs)
-        thr.start()
-    return wrapper
 
 class ImgModel:
     base64Img = None
