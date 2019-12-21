@@ -13,7 +13,7 @@ class GUI(tk.Frame):
     #model
     imgModel = None
 
-    inputImgPath = ""
+    inputImgPath = "test.png"
 
     imgWidth = 480
     imgHeight = 270
