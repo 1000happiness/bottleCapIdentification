@@ -23,10 +23,10 @@ class ImgModel:
     def __init__(self):
         self.identifyModel = IdentifyModel()
 
-    def setbase64Image(self, base64Img):
+    def setBase64Image(self, base64Img):
         self.base64Img = base64Img
     
-    def getResultbase64Image(self, base64Img):
+    def getResultbase64Image(self):
         return self.base64Img
 
     def setPilImage(self, pilImg):
@@ -38,3 +38,5 @@ class ImgModel:
     def identify(self):
         self.pilImg, identifyList = self.identifyModel.identify(self.pilImg)
         print(identifyList)
+
+    
