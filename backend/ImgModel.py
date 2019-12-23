@@ -7,7 +7,8 @@ from PIL import Image
 from IdentifyModel import IdentifyModel
 
 class ImgModel:
-    base64Img = None
+    base64InputImg = None
+    base64ResultImg = None
     pilImg = None
     imgId = 0
 
@@ -17,10 +18,14 @@ class ImgModel:
         self.identifyModel = IdentifyModel()
 
     def setBase64Img(self, base64Img):
-        self.base64Img = base64Img
+        self.base64InputImg = base64Img
+        self.base64ResultImg = base64Img
+    
+    def getInputbase64Img(self):
+        return self.base64InputImg
     
     def getResultbase64Img(self):
-        return self.base64Img
+        return self.base64ResultImg
 
     def setPilImg(self, pilImg):
         self.pilImg = self.__preProcess(pilImg)

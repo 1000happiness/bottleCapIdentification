@@ -7,6 +7,8 @@ const { Header, Footer, Content } = Layout;
 const { Text } = Typography;
 const { Panel } = Collapse;
 
+var inputIndex = 2
+
 const LabelerDatacolumns = [
     {
         title: '编号',
@@ -37,6 +39,7 @@ class Mian extends Component {
             labeledData: null,
             inputImagePath: null,
             outputImagePath: null,
+            i: 0,
         }
     }
 
@@ -74,10 +77,11 @@ class Mian extends Component {
             method: "POST",
             body: formData
         });
-
+        console.log(response)
         this.setState({
-            inputImagePath: "http://localhost:8000/getImage"
+            inputImagePath: "http://localhost:8000/getImage?image=" + inputIndex,
         })
+        inputIndex = (inputIndex > 0 ? 0 : 2)
         
         // response.then(
         //     function (response) {

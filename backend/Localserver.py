@@ -11,12 +11,18 @@ class CapIdentificationHandler(web.RequestHandler):
         args = self.request.body
         
         args = args[args.find(b"image/jpeg\r\n\r\n") + 14 : -1]
-        self.imgModel.setBase64Image(b64encode(args))
+        # print(args[0: 200])
+        self.imgModel.setBase64Img(args)
 
         self.write("{\"success\": true}")
 
     def get(self):
-        self.write(self.imgModel.getResultbase64Image())
+        uri = self.request.uri
+        if(eval(uri[uri.find("image") + 6]) % 2 == 0):
+            self.write(self.imgModel.getInputbase64Img())
+        else:
+            self.write(self.imgModel.getResultbase64Img())
+        
 
 class Localserver:
     #image model
