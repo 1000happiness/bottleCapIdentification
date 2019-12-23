@@ -25,7 +25,7 @@ class CapIdentificationImgHandler(web.RequestHandler):
 
     def get(self):
         uri = self.request.uri
-        if(eval(uri[uri.find("image") + 6]) % 2 == 0):
+        if(eval(uri[uri.find("image") + 6:]) % 2 == 0):
             self.write(self.imgModel.getInputbase64Img())
         else:
             self.write(self.imgModel.getResultbase64Img())
