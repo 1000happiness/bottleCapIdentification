@@ -9,8 +9,10 @@ from IdentifyModel import IdentifyModel
 class ImgModel:
     base64InputImg = None
     base64ResultImg = None
+    resultList = []
+    formalResultList = []
     pilImg = None
-    imgId = 0
+    #imgId = 0
 
     identifyModel = None
 
@@ -20,12 +22,35 @@ class ImgModel:
     def setBase64Img(self, base64Img):
         self.base64InputImg = base64Img
         self.base64ResultImg = base64Img
+        self.resultList = [((0,0),(2,0),(2,2),(0,2),(0,0,-1))]
+        self.formalResultList = []
+        for i in range(len(self.resultList)):
+            location = "(" + str((self.resultList[i][0][0] + self.resultList[i][2][0]) / 2) + ","  + str((self.resultList[i][0][1] + self.resultList[i][2][1]) / 2) + ")"
+            directionDescription = None
+            if(self.resultList[i][4][2] == 1):
+                directionDescription = "上"
+            elif(self.resultList[i][4][2] == -1):
+                directionDescription = "下"
+            else:
+                directionDescription = "侧"
+
+            self.formalResultList.append(
+                {
+                    "id": i,
+                    "location": location,
+                    "directionDescription": directionDescription,
+                    "direction": str(self.resultList[i][4])
+                }
+            )
     
     def getInputbase64Img(self):
         return self.base64InputImg
     
     def getResultbase64Img(self):
         return self.base64ResultImg
+
+    def getFormalResultList(self):
+        return self.formalResultList
 
     def setPilImg(self, pilImg):
         self.pilImg = self.__preProcess(pilImg)
@@ -34,8 +59,26 @@ class ImgModel:
         return self.pilImg
  
     def identify(self):
-        self.pilImg, identifyList = self.identifyModel.identify(self.pilImg)
-        print(identifyList)
+        self.pilImg, self.resultList = self.identifyModel.identify(self.pilImg)
+        for i in range(self.resultList):
+            location = "(" + str((self.resultList[i][0][0] + self.resultList[i][2][0]) / 2) + ","  + str((self.resultList[i][0][1] + self.resultList[i][2][1]) / 2) + ")"
+            directionDescription = None
+            if(self.resultList[i][4][2] == 1):
+                directionDescription = "上"
+            elif(self.resultList[i][4][2] == -1):
+                directionDescription = "下"
+            else:
+                directionDescription = "侧"
+
+            self.formalResultList.append(
+                {
+                    "id": i,
+                    "location": location,
+                    "directionDescription": directionDescription,
+                    "direction": str(self.resultList[i][4])
+                }
+            )
+        print(self.resultList)
 
     def __preProcess(self, pilImg):
         npImg = np.asarray(pilImg)
