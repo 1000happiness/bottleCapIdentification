@@ -7,7 +7,10 @@ const { Header, Footer, Content } = Layout;
 const { Text } = Typography;
 const { Panel } = Collapse;
 
-const LabelerDatacolumns = [
+var inputIndex = 2
+var outputIndex = 1
+
+const labelerDatacolumns = [
     {
         title: '编号',
         dataIndex: 'id',
@@ -37,26 +40,11 @@ class Mian extends Component {
             labeledData: null,
             inputImagePath: null,
             outputImagePath: null,
+            
         }
     }
 
     componentDidMount() {
-        this.setState({
-            labeledData: [
-                {
-                    id: 1,
-                    location: "(5, 5)",
-                    directionDescription: "向上",
-                    direction: "(0,0,1)"
-                },
-                {
-                    id: 1,
-                    location: "(5, 5)",
-                    directionDescription: "向上",
-                    direction: "(0,0,1)"
-                }
-            ]
-        })
     }
 
     componentWillUnmount() {
@@ -64,47 +52,72 @@ class Mian extends Component {
 
     handleUpload(file) {
         const formData = new FormData();
-        console.log(file)
         formData.append('image', file);
 
         var t = this;
-        var response = null;
         var url = "http://localhost:8000/setImage";
         var response = fetch(url, {
             method: "POST",
+            mode: "cors",
             body: formData
         });
-
-        this.setState({
-            inputImagePath: "http://localhost:8000/getImage"
-        })
-        
-        // response.then(
-        //     function (response) {
-        //         console.log(response);
-        //         if (response.status !== 200) {
-        //             console.log("存在一个问题，状态码为：" + response.status);
-        //             return;
-        //         }
-        //         return response.json();
-        //     }
-        // ).then(
-        //     function (data) {
-        //         if (data.success) {
-        //             message.success("上传成功");
-        //         }
-        //         else {
-        //             message.error("上传失败");
-        //             console.log(data.errmsg);
-        //         }
-        //     }
-        // ).catch(
-        //     function (err) {
-        //         message.error("上传失败");
-        //         console.log(err);
-        //     }
-        // );
+        response.then(
+            function(response){
+                return response.json()
+            }
+        ).then(
+            function(data){
+                if(data.success){
+                    t.setState({
+                        inputImagePath: "http://localhost:8000/getImage?image=" + inputIndex,
+                    })
+                    inputIndex = (inputIndex > 0 ? 0 : 2)
+                }
+                else{
+                    message.error("获取图片失败")
+                }
+            }
+        ).catch(
+            function (err) {
+                message.error("上传失败");
+                console.log(err);
+            }
+        );
     };
+
+    handleGetResult() {
+        var t = this;
+        console.log(t);
+        var url = "http://localhost:8000/getResultList";
+        var response = fetch(url, {
+            method: "GET",
+            mode: "cors",
+        });
+        response.then(
+            function(response){
+                console.log(response)
+                return response.json()
+            }
+        ).then(
+            function(data){
+                if(data.success){
+                    t.setState({
+                        labeledData: data.resultList,
+                        outputImagePath: "http://localhost:8000/getImage?image=" + outputIndex
+                    });
+                    outputIndex = (outputIndex > 1 ? 1 : 3);
+                }
+                else{
+                    message.error("获取标记列表失败")
+                }
+            }
+        ).catch(
+            function (err) {
+                message.error("获取标记列表失败");
+                console.log(err);
+            }
+        );
+    }
 
     render() {
 
@@ -127,7 +140,6 @@ class Mian extends Component {
             },
             showUploadList: false,
         };
-
 
         return (
             <div id="mainDiv">
@@ -155,7 +167,7 @@ class Mian extends Component {
                                     </Upload>
                                 </Col>
                                 <Col id="outputButtonCol" span={12}>
-                                    <Button>
+                                    <Button onClick={() => this.handleGetResult()}>
                                         获取结果
                                     </Button>
                                 </Col>
@@ -205,7 +217,7 @@ class Mian extends Component {
                                             key="0"
                                         >
                                             <Table
-                                                columns={LabelerDatacolumns}
+                                                columns={labelerDatacolumns}
                                                 dataSource={this.state.labeledData}
                                             />
                                         </Panel>
