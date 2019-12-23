@@ -51,9 +51,9 @@ class Mian extends Component {
     }
 
     handleUpload(file) {
-        const formData = new FormData();
+        var formData = new FormData();
         formData.append('image', file);
-
+        console.log(file)
         var t = this;
         var url = "http://localhost:8000/setImage";
         var response = fetch(url, {
@@ -71,7 +71,7 @@ class Mian extends Component {
                     t.setState({
                         inputImagePath: "http://localhost:8000/getImage?image=" + inputIndex,
                     })
-                    inputIndex = (inputIndex > 0 ? 0 : 2)
+                    inputIndex = 2 + inputIndex
                 }
                 else{
                     message.error("获取图片失败")
@@ -105,7 +105,7 @@ class Mian extends Component {
                         labeledData: data.resultList,
                         outputImagePath: "http://localhost:8000/getImage?image=" + outputIndex
                     });
-                    outputIndex = (outputIndex > 1 ? 1 : 3);
+                    outputIndex = 2 + outputIndex;
                 }
                 else{
                     message.error("获取标记列表失败")
@@ -130,9 +130,9 @@ class Mian extends Component {
                     message.error('你只能上传图片文件');
                     return false;
                 }
-                const isLt2M = file.size / 1024 / 1024 < 1;
+                const isLt2M = file.size / 1024 / 1024 < 6;
                 if (!isLt2M) {
-                    message.error('图片大小不得大于1MB');
+                    message.error('图片大小不得大于6MB');
                     return false;
                 }
                 t.handleUpload(file);

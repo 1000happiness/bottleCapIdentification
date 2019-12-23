@@ -5,7 +5,22 @@ import cv2
 from copy import deepcopy
 from PIL import Image
 from IdentifyModel import IdentifyModel
+from io import BytesIO
+from base64 import b64decode
+# import base64
+# from io import BytesIO
 
+# from PIL import Image
+
+
+# def base64_to_image(base64_str, image_path=None):
+#     base64_data = re.sub('^data:image/.+;base64,', '', base64_str)
+#     byte_data = base64.b64decode(base64_data)
+#     image_data = BytesIO(byte_data)
+#     img = Image.open(image_data)
+#     if image_path:
+#         img.save(image_path)
+#     return img
 class ImgModel:
     base64InputImg = None
     base64ResultImg = None
@@ -22,7 +37,8 @@ class ImgModel:
     def setBase64Img(self, base64Img):
         self.base64InputImg = base64Img
         self.base64ResultImg = base64Img
-        self.resultList = [((0,0),(2,0),(2,2),(0,2),(0,0,-1))]
+        self.pilImg = Image.open(BytesIO(self.base64InputImg))
+        # self.resultList = [((0,0),(2,0),(2,2),(0,2),(0,0,-1))]
         self.formalResultList = []
         for i in range(len(self.resultList)):
             location = "(" + str((self.resultList[i][0][0] + self.resultList[i][2][0]) / 2) + ","  + str((self.resultList[i][0][1] + self.resultList[i][2][1]) / 2) + ")"
