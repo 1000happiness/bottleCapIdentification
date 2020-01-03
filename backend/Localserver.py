@@ -2,6 +2,7 @@ from tornado import ioloop
 from tornado import web
 from json import loads, dumps
 from base64 import b64encode
+from time import sleep
 
 class CapIdentificationImgHandler(web.RequestHandler):
     def initialize(self, imgModel):
@@ -20,8 +21,13 @@ class CapIdentificationImgHandler(web.RequestHandler):
         args = args[args.find(b"image/jpeg\r\n\r\n") + 14 : -1]
         # print(args[0: 200])
         self.imgModel.setBase64Img(args)
-
-        self.write("{\"success\": true}")
+        shape = self.imgModel.getImgShape()
+        resBody = {
+            "success": True,
+            "imgWidth": shape[1],
+            "imgHeight": shape[0] 
+        }
+        self.write(dumps(resBody))
 
     def get(self):
         uri = self.request.uri
@@ -42,6 +48,7 @@ class CapIdentificationListHandler(web.RequestHandler):
         self.set_header("Access-Control-Allow-Credentials","true")
 
     def get(self):
+        self.imgModel.identify()
         resBody = {
             "success": True,
             "resultList": self.imgModel.getFormalResultList()
