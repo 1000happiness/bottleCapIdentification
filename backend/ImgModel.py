@@ -113,7 +113,6 @@ class ImgModel:
         npImg = np.array(sizedpilImg)
         left, right = self.__deleteColAround(npImg)
         low, high = self.__deleteRowAround(npImg)
-        # low, high = 0,0
 
         npImg = np.array(pilImg)
         left = int(left * rate)
@@ -121,6 +120,7 @@ class ImgModel:
         low = int (low * rate)
         high = int(high * rate)
         newnpImg = deepcopy(npImg[low: high,left: right])
+        print(low, high,left, right)
         identifyImg = Image.fromarray(newnpImg)
 
         return identifyImg, (low, high, left, right)
@@ -150,8 +150,12 @@ class ImgModel:
                 k = k + colRange
             else:
                 k = k + colRange
+        print("col")
+        print(col)
         if(len(col) < 2):
             return 0, -1
+        elif(len(col) == 2):
+            return col[0] - 2 , col[1] + 2
         first = 0
         second = 0
 
@@ -187,8 +191,8 @@ class ImgModel:
         else:
             second = 1
 
-        left = col[first]
-        right = col[second]
+        left = col[first] - 2
+        right = col[second] + 2 
         
         return left, right
 
@@ -206,18 +210,23 @@ class ImgModel:
                     if(np.any(cannyImg[i: i + rowRange, k] == 255)):
                         length = length + 1
                 if(length > np.array(cannyImg).shape[1] / 3):
-                    if(i > np.array(cannyImg).shape[0] / 2):
-                        row.append(i)
-                    else:
-                        row.append(i + rowRange)
+                    if(i >= np.array(cannyImg).shape[0] / 3 * 2 or i <= np.array(cannyImg).shape[0] / 3):    
+                        if(i > np.array(cannyImg).shape[0] / 2):
+                            row.append(i)
+                        else:
+                            row.append(i + rowRange)
                 i = i + rowRange
             else:
                 i = i + rowRange
         if(len(row) < 2):
             return 0, -1
+        if(len(row) == 2):
+            return row[0] - 2, row[1] + 2
         first = 0
-        second = 0
+        second = 1
 
+        print("row")
+        print(row)
         if(len(row) > 2):
             rowValue = np.zeros(len(row))
             gaussianImg = cv2.GaussianBlur(cvImg, (11,11), 3)
@@ -250,7 +259,7 @@ class ImgModel:
         else:
             second = 1
 
-        low = row[first]
-        high = row[second]
+        low = row[first] - 2
+        high = row[second] + 2
         
         return low, high

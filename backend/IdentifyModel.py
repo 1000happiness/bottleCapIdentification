@@ -39,7 +39,8 @@ class IdentifyModel:
         cvImg = cv2.cvtColor(np.array(sizedPilImg), cv2.COLOR_BGR2GRAY)
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
-
+        pil = Image.fromarray(cannyImg)
+        pil.save("save.jpg")
         # cv2.imshow("1", cannyImg)
         # cv2.waitKey()
         
@@ -59,7 +60,7 @@ class IdentifyModel:
                     self.node_location_list2.append((x*rate,(y+h)*rate))
                     self.node_location_list3.append(((x+w)*rate,(y+h)*rate))
                     self.node_location_list4.append(((x+w)*rate,y*rate))
-                    if(self.positiveCap.judgePositive(inputCVImg[int(y*rate - 50): int((y+h)*rate + 50), int(x*rate - 50): int((x+w)*rate + 50)])):
+                    if(self.positiveCap.judgePositive(inputCVImg[int(y*rate - 15): int((y+h)*rate + 15), int(x*rate - 15): int((x+w)*rate + 15)])):
                         self.direction_list.append((0,0,1))
                     else:
                         self.direction_list.append((0,0,-1))
@@ -127,7 +128,7 @@ class positiveCap:
         result = cv2.filter2D(result,-1,kernel2)
         # cv2.imshow('?',result)
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
-        canny = cv2.Canny(gray, 12.5, 25)
+        # canny = cv2.Canny(gray, 12.5, 25)
         # cv2.imshow('2', canny)
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1,
                                 (width / 12), param1=25, param2=80, minRadius=int(width / 6))
