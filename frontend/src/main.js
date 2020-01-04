@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Typography, Layout, Row, Col, Avatar, Button, Collapse, Table, Upload, message } from 'antd';
+import { Typography, Layout, Row, Col, Button, Collapse, Table, Upload, message, Spin } from 'antd';
 
 import "../src/main.css";
 
@@ -40,7 +40,9 @@ class Mian extends Component {
             labeledData: null,
             inputImagePath: null,
             outputImagePath: null,
-            
+            imgShape: [500,375],
+            imgSize: [0, 0],
+            spin: false,
         }
     }
 
@@ -70,6 +72,9 @@ class Mian extends Component {
                 if(data.success){
                     t.setState({
                         inputImagePath: "http://localhost:8000/getImage?image=" + inputIndex,
+                        outputImagePath: null,
+                        imgSize: [data.imgWidth, data.imgHeight],
+                        imgShape: t.resize(data.imgWidth, data.imgHeight)
                     })
                     inputIndex = 2 + inputIndex
                 }
@@ -86,6 +91,10 @@ class Mian extends Component {
     };
 
     handleGetResult() {
+        this.setState({
+            spin: true,
+        });
+        
         var t = this;
         console.log(t);
         var url = "http://localhost:8000/getResultList";
@@ -103,6 +112,7 @@ class Mian extends Component {
                 if(data.success){
                     t.setState({
                         labeledData: data.resultList,
+                        spin: false,
                         outputImagePath: "http://localhost:8000/getImage?image=" + outputIndex
                     });
                     outputIndex = 2 + outputIndex;
@@ -117,6 +127,17 @@ class Mian extends Component {
                 console.log(err);
             }
         );
+    }
+
+    resize(width, height) {
+        var rate = 0;
+        if(width > height){
+            rate = width / 500;
+        }
+        else{
+            rate = height / 500;
+        }
+        return [width / rate, height / rate]
     }
 
     render() {
@@ -175,34 +196,72 @@ class Mian extends Component {
                             <Row id="discriptionRow">
                                 <Col id="inputButtonCol" span={12}>
                                     <Text id="inputImageText">
-                                        原图
+                                        原图{
+                                            (
+                                                this.state.inputImagePath === null ?
+                                                (
+                                                    ""
+                                                )
+                                                :
+                                                (
+                                                    "："
+                                                    + String(this.state.imgSize[0]) 
+                                                    + String("*")
+                                                    + String(this.state.imgSize[1]) 
+                                                )
+                                            )
+                                        }
                                     </Text>
                                 </Col>
                                 <Col id="outputButtonCol" span={12}>
                                     <Text id="outputImageText">
-                                        处理后图片
+                                        处理后图片{
+                                            (
+                                                this.state.outputImagePath === null ?
+                                                (
+                                                    ""
+                                                )
+                                                :
+                                                (
+                                                    "："
+                                                    + String(this.state.imgSize[0]) 
+                                                    + String("*")
+                                                    + String(this.state.imgSize[1]) 
+                                                )
+                                            )
+                                        }
                                     </Text>
                                 </Col>
                             </Row>
                             <Row id="imageRow">
                                 <Col id="inputImageCol" span={12}>
                                     <div id="imageDiv">
-                                        <Avatar
-                                            id="imageAvatar"
+                                        <img
+                                            id="img"
                                             src={this.state.inputImagePath}
-                                            shape="square"
-                                            size={500}
+                                            width={this.state.imgShape[0]}
+                                            height={this.state.imgShape[1]}
                                         />
                                     </div>
                                 </Col>
                                 <Col id="outputImageCol" span={12}>
                                     <div id="imageDiv">
-                                        <Avatar
-                                            id="imageAvatar"
-                                            src={this.state.outputImagePath}
-                                            shape="square"
-                                            size={500}
-                                        />
+                                        {
+                                            this.state.spin ? 
+                                            (
+                                                <Spin id = "imgSpin" tip = "loading">
+                                                </Spin>
+                                            )
+                                            :
+                                            (
+                                                <img
+                                                    id="img"
+                                                    src={this.state.outputImagePath}
+                                                    width={this.state.imgShape[0]}
+                                                    height={this.state.imgShape[1]}
+                                                />
+                                            )
+                                        }
                                     </div>
                                 </Col>
                             </Row>

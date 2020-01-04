@@ -89,6 +89,7 @@ class GUI(tk.Frame):
             self.pilInputImg = Image.open(self.inputImgPath)
             self.pilInputImg = self.__resize(self.pilInputImg, self.imgWidth, self.imgHeight)
             self.imgModel.setPilImg(self.pilInputImg)
+            self.imgModel.identify()
             self.tkInputImg = ImageTk.PhotoImage(image=self.pilInputImg)
             self.inputImgLabel = tk.Label(self, image=self.tkInputImg)
             self.inputImgLabel.grid(row = 6, column = 0, columnspan = 6)
@@ -107,7 +108,6 @@ class GUI(tk.Frame):
         return filePath
 
     def __getResult(self):
-        self.imgModel.identify()
         self.tkOutputImg = ImageTk.PhotoImage(image=imgModel.getPilImg())
         self.outputImgLabel = tk.Label(self, image=self.tkOutputImg)
         self.outputImgLabel.grid(row = 6, column = 6, columnspan = 6)
