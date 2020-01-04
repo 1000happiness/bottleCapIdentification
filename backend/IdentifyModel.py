@@ -22,6 +22,7 @@ class IdentifyModel:
         self.node_location_list4=[]
         self.direction_list=[]
         inputCVImg = cv2.cvtColor(np.array(inputPilImg), cv2.COLOR_RGBA2RGB)
+        # inputPilImg.save("10.jpg")
         '''
         返回的list里面前两个元组表示瓶盖所在的长方体的对角线的两个点
         第三个元组表示瓶盖平面归一化的法向量(x,y,z)
@@ -39,8 +40,8 @@ class IdentifyModel:
         cvImg = cv2.cvtColor(np.array(sizedPilImg), cv2.COLOR_BGR2GRAY)
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
-        pil = Image.fromarray(cannyImg)
-        pil.save("save.jpg")
+        # pil = Image.fromarray(cannyImg)
+        # pil.save("20.jpg")
         # cv2.imshow("1", cannyImg)
         # cv2.waitKey()
         
@@ -61,8 +62,10 @@ class IdentifyModel:
                     self.node_location_list3.append(((x+w)*rate,(y+h)*rate))
                     self.node_location_list4.append(((x+w)*rate,y*rate))
                     if(self.positiveCap.judgePositive(inputCVImg[int(y*rate - 15): int((y+h)*rate + 15), int(x*rate - 15): int((x+w)*rate + 15)])):
+                        print(1)
                         self.direction_list.append((0,0,1))
                     else:
+                        print(-1)
                         self.direction_list.append((0,0,-1))
                     continue
 
@@ -119,11 +122,11 @@ class positiveCap:
         # img = cv2.imread(name + '.png')
         width = len(img[0])
         height = len(img)
-        # result = cv2.bilateralFilter(img,5,11,11)
+        result = cv2.bilateralFilter(img,5,11,11)
         # result = self._alpha(result,1.6)
-        result = cv2.blur(img, (7,7))
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
-        result = cv2.morphologyEx(result,cv2.MORPH_CLOSE,kernel)
+        # result = cv2.blur(img, (7,7))
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(7,7))
+        result = cv2.morphologyEx(result,cv2.MORPH_OPEN,kernel)
         kernel2 = np.array([[0, -0.2, 0], [-0.2, 1.8, -0.2], [0, -0.2, 0]])
         result = cv2.filter2D(result,-1,kernel2)
         # cv2.imshow('?',result)
@@ -157,9 +160,11 @@ class positiveCap:
     def judgePositive(self, img):
         pil = Image.fromarray(img)
         pil.save(str(self.i) + ".jpg", quality = 95)
+        # pil = Image.open(str(self.i) + ".jpg")
         self.i = self.i + 1
+        # img = cv2.cvtColor(np.array(pil),cv2.COLOR_RGB2RGBA)
         num = self._proc(img)
-        return num <= 3
+        return num <= 2
 
 if __name__ == "__main__":
     image = Image.open("save.jpg")

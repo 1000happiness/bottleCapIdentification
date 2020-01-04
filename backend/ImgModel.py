@@ -129,9 +129,8 @@ class ImgModel:
         cvImg = cv2.cvtColor(npImg, cv2.COLOR_RGB2GRAY)
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
+        Image.fromarray(cannyImg).save("A.jpg")
 
-      
-        
         col = []
         k = 0
         colRange = 15
@@ -163,6 +162,7 @@ class ImgModel:
             colValue = np.zeros(len(col))
             gaussianImg = cv2.GaussianBlur(cvImg, (11,11), 3)
             gaussiancannyImg = cv2.Canny(gaussianImg, 5, 80)
+            Image.fromarray(gaussiancannyImg).save("B.jpg")
             for k in range(np.array(gaussiancannyImg).shape[1]):
                 left = 0
                 right = 1
