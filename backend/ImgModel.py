@@ -73,7 +73,7 @@ class ImgModel:
             for k in range(4):
                 locationData[i][k][0] = resultList[i][k][0] + self.newSize[2]
                 locationData[i][k][1] = resultList[i][k][1] + self.newSize[0]
-            location = str(round((locationData[i][0][0] + locationData[i][2][0]) / 2, 1)) + ", " + str(round((locationData[i][0][1] + locationData[i][2][1]) / 2, 1)) 
+            location = str(round((locationData[i][0][1] + locationData[i][2][1]) / 2, 1)) + ", " + str(round((locationData[i][0][0] + locationData[i][2][0]) / 2, 1)) 
             directionDescription = None
             if(resultList[i][4][2] == 1):
                 directionDescription = "上"
@@ -135,8 +135,7 @@ class ImgModel:
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
 
-        tempPilImg = Image.fromarray(cannyImg)
-        # tempPilImg.save("test9.jpg", quality=95)
+      
         
         col = []
         k = 0

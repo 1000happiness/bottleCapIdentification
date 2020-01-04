@@ -41,6 +41,7 @@ class Mian extends Component {
             inputImagePath: null,
             outputImagePath: null,
             imgShape: [500,375],
+            imgSize: [0, 0],
             spin: false,
         }
     }
@@ -72,6 +73,7 @@ class Mian extends Component {
                     t.setState({
                         inputImagePath: "http://localhost:8000/getImage?image=" + inputIndex,
                         outputImagePath: null,
+                        imgSize: [data.imgWidth, data.imgHeight],
                         imgShape: t.resize(data.imgWidth, data.imgHeight)
                     })
                     inputIndex = 2 + inputIndex
@@ -135,7 +137,6 @@ class Mian extends Component {
         else{
             rate = height / 500;
         }
-        console.log([width / rate, height / rate])
         return [width / rate, height / rate]
     }
 
@@ -195,12 +196,40 @@ class Mian extends Component {
                             <Row id="discriptionRow">
                                 <Col id="inputButtonCol" span={12}>
                                     <Text id="inputImageText">
-                                        原图
+                                        原图{
+                                            (
+                                                this.state.inputImagePath === null ?
+                                                (
+                                                    ""
+                                                )
+                                                :
+                                                (
+                                                    "："
+                                                    + String(this.state.imgSize[0]) 
+                                                    + String("*")
+                                                    + String(this.state.imgSize[1]) 
+                                                )
+                                            )
+                                        }
                                     </Text>
                                 </Col>
                                 <Col id="outputButtonCol" span={12}>
                                     <Text id="outputImageText">
-                                        处理后图片
+                                        处理后图片{
+                                            (
+                                                this.state.outputImagePath === null ?
+                                                (
+                                                    ""
+                                                )
+                                                :
+                                                (
+                                                    "："
+                                                    + String(this.state.imgSize[0]) 
+                                                    + String("*")
+                                                    + String(this.state.imgSize[1]) 
+                                                )
+                                            )
+                                        }
                                     </Text>
                                 </Col>
                             </Row>

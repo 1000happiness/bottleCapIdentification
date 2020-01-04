@@ -79,8 +79,8 @@ class IdentifyModel:
                     self.node_location_list3.append(box[2]*(rate,rate))
                     self.node_location_list4.append(box[3]*(rate,rate))
                     self.direction_list.append((
-                        round(rect[1][0] / math.hypot(rect[1][0],rect[1][1]), 1),
-                        round(rect[1][1] / math.hypot(rect[1][0],rect[1][1]), 1),
+                        round(rect[1][0] / math.hypot(rect[1][0],rect[1][1]), 3),
+                        round(rect[1][1] / math.hypot(rect[1][0],rect[1][1]), 3),
                         0
                     ))
         
@@ -118,8 +118,9 @@ class positiveCap:
         # img = cv2.imread(name + '.png')
         width = len(img[0])
         height = len(img)
-        result = cv2.bilateralFilter(img,5,11,11)
-        result = self._alpha(result,1.6)
+        # result = cv2.bilateralFilter(img,5,11,11)
+        # result = self._alpha(result,1.6)
+        result = cv2.blur(img, (7,7))
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(5,5))
         result = cv2.morphologyEx(result,cv2.MORPH_CLOSE,kernel)
         kernel2 = np.array([[0, -0.2, 0], [-0.2, 1.8, -0.2], [0, -0.2, 0]])
