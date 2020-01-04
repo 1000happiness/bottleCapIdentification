@@ -164,7 +164,7 @@ class positiveCap:
         self.i = self.i + 1
         # img = cv2.cvtColor(np.array(pil),cv2.COLOR_RGB2RGBA)
         num = self._proc(img)
-        return num <= 2
+        return num <= 3
 
 if __name__ == "__main__":
     image = Image.open("save.jpg")
