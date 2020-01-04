@@ -5,7 +5,6 @@
   * ImgModel.py
   * Localserver.py
   * main.py
-  * test.py
   
 # 环境配置
 
@@ -25,7 +24,6 @@
     pip install numpy==1.14.2
     pip install opencv-python==4.1.2.30
     pip install pillow==5.0.0
-    pip install tkinter //tkinter只在自己测试时使用
 
 # 运行
 ## 前端
@@ -35,16 +33,10 @@
     npm start
   
 ## 后端
- * 在验证自己的模型时，输入
- 
-    cd backend
-    python3 test.py
-    
- * 在test.py中编写了（简陋的）GUI界面用来测试，所以测试时不需要运行前端，但是使用test.py会压缩图片，可能无法得到理想的结果
 
- * 在与前端联调时，输入
+ * 在main.py中编写了本地服务器的启动程序
  
     cd backend
     python3 main.py
     
- * 在main.py中编写了本地服务器的启动程序
+
