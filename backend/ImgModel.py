@@ -8,8 +8,6 @@ from IdentifyModel import IdentifyModel
 from io import BytesIO
 from base64 import b64decode, b64encode
 
-from time import sleep
-
 class ImgModel:
     base64InputImg = None
     base64ResultImg = None
@@ -52,7 +50,6 @@ class ImgModel:
     def identify(self):
         # identify
         resultList = self.identifyModel.identify(self.identifyPilImg)
-        # print(resultList)
         # afterProcess
         self.__afterProcess(resultList)
         
@@ -67,9 +64,7 @@ class ImgModel:
 
     def __afterProcess(self, resultList):
         locationData = np.zeros((len(resultList), 4, 2))
-        # print(self.newSize)
         for i in range(len(resultList)):
-            # print(resultList[i])
             for k in range(4):
                 locationData[i][k][0] = resultList[i][k][0] + self.newSize[2]
                 locationData[i][k][1] = resultList[i][k][1] + self.newSize[0]

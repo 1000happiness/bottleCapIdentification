@@ -43,7 +43,7 @@ class IdentifyModel:
         # cv2.imshow("1", cannyImg)
         # cv2.waitKey()
         
-        edgeImg, contours, hier = cv2.findContours(cannyImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        contours, hier = cv2.findContours(cannyImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         # 检测边缘
         for c in contours:
             x, y, w, h = cv2.boundingRect(c)
