@@ -8,6 +8,10 @@
     color: black;
 }
 
+#mainContent{
+    background-color: white;
+}
+
 #mainHeader{
     text-align: center;
 }
@@ -70,7 +74,7 @@
     border-style: solid;
     text-align: center;
     width: 506px;
-    height: 506px;
+    height: 381px;
 }
 
 #imageAvatar{
@@ -87,6 +91,6 @@
 }
 
 #imgSpin{
-    padding-top: 220px;
+    padding-top: 170px;
     margin: 0 auto;
 }

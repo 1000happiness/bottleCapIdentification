@@ -40,7 +40,7 @@ class Mian extends Component {
             labeledData: null,
             inputImagePath: null,
             outputImagePath: null,
-            imgShape: [500,500],
+            imgShape: [500,375],
             spin: false,
         }
     }
