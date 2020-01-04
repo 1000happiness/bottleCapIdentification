@@ -25,6 +25,7 @@
     pip install opencv-python==4.1.2.30
     pip install pillow==5.0.0
 
+
 # 运行
 ## 前端
 
@@ -34,9 +35,10 @@
   
 ## 后端
 
- * 在main.py中编写了本地服务器的启动程序
  
     cd backend
     python3 main.py
+    
+ * 在main.py中编写了本地服务器的启动程序
     
 
