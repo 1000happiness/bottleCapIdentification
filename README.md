@@ -14,12 +14,17 @@
 * 安装react
 
 ## 后端
-* 安装python3
-* >pip install tornado
-* >pip install numpy
-* >pip install tkinter //tkinter只在自己测试时使用
-* 程序中需要的其他包都是python3自带的，如果使用Anaconda3进行包管理，在那么上面的tornado、numpy、tkinter都已经装好了
+建议使用conda导入环境
 
+    conda env create -f environment.yaml
+
+注意高版本环境会导致识别问题，自行安装请务必保证版本号一致。
+* 安装python3.6.4
+* >pip install tornado==4.5.3
+* >pip install numpy==1.14.2
+* >pip install opencv-python==4.1.2.30
+* >pip install pillow==5.0.0
+* >pip install tkinter //tkinter只在自己测试时使用
 
 # 运行
 ## 前端
