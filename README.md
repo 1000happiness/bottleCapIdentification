@@ -16,9 +16,7 @@
 
     conda env create -f environment.yaml
 
-注意高版本环境会导致识别问题，自行安装请务必保证版本号一致。
-
-安装python3.6.4
+或自行安装python3.6.4（注意高版本环境会导致识别问题，自行安装请务必保证版本号一致）
 
     pip install tornado==4.5.3
     pip install numpy==1.14.2
