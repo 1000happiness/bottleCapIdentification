@@ -22,7 +22,6 @@ class IdentifyModel:
         self.node_location_list4=[]
         self.direction_list=[]
         inputCVImg = cv2.cvtColor(np.array(inputPilImg), cv2.COLOR_RGBA2RGB)
-        # inputPilImg.save("10.jpg")
         '''
         返回的list里面前两个元组表示瓶盖所在的长方体的对角线的两个点
         第三个元组表示瓶盖平面归一化的法向量(x,y,z)
@@ -40,10 +39,6 @@ class IdentifyModel:
         cvImg = cv2.cvtColor(np.array(sizedPilImg), cv2.COLOR_BGR2GRAY)
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
-        # pil = Image.fromarray(cannyImg)
-        # pil.save("20.jpg")
-        # cv2.imshow("1", cannyImg)
-        # cv2.waitKey()
         
         contours, hier = cv2.findContours(cannyImg, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         # 检测边缘
@@ -62,10 +57,8 @@ class IdentifyModel:
                     self.node_location_list3.append(((x+w)*rate,(y+h)*rate))
                     self.node_location_list4.append(((x+w)*rate,y*rate))
                     if(self.positiveCap.judgePositive(inputCVImg[int(y*rate - 15): int((y+h)*rate + 15), int(x*rate - 15): int((x+w)*rate + 15)])):
-                        print(1)
                         self.direction_list.append((0,0,1))
                     else:
-                        print(-1)
                         self.direction_list.append((0,0,-1))
                     continue
 
@@ -74,7 +67,6 @@ class IdentifyModel:
             if 100 >rect[1][0] > 10 and 100 >rect[1][1] > 10:
                 box = cv2.boxPoints(rect)  # 找到最小矩形的顶点
                 #显示侧面请转换box格式，见下
-                # box = np.int0(box)
                 if ((rect[1][0] / rect[1][1]) > 1.2 or 0 < (rect[1][0] / rect[1][1]) < 0.8):
                     #显示侧面矩形轮廓
 
@@ -102,7 +94,6 @@ class IdentifyModel:
 
 class positiveCap:
     def __init__(self):
-        self.i = 0
         pass
 
     # 把图像灰度化
@@ -112,35 +103,24 @@ class positiveCap:
     # 调整图像对比度
     def _alpha(self, img,alpha):
         mean = cv2.mean(self._gray(img))[0]
-        # mean = 127
         beta = mean*(1-alpha)
         return np.uint8(np.clip((alpha * img + beta), 0, 255))
 
     # 主要过程，返回图中包含的圆的数量
     def _proc(self, img):
-        # name = input()
-        # img = cv2.imread(name + '.png')
         width = len(img[0])
         height = len(img)
         result = cv2.bilateralFilter(img,5,11,11)
-        # result = self._alpha(result,1.6)
-        # result = cv2.blur(img, (7,7))
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT,(7,7))
         result = cv2.morphologyEx(result,cv2.MORPH_OPEN,kernel)
         kernel2 = np.array([[0, -0.2, 0], [-0.2, 1.8, -0.2], [0, -0.2, 0]])
         result = cv2.filter2D(result,-1,kernel2)
-        # cv2.imshow('?',result)
         gray = cv2.cvtColor(result, cv2.COLOR_BGR2GRAY)
-        # canny = cv2.Canny(gray, 12.5, 25)
-        # cv2.imshow('2', canny)
         circles = cv2.HoughCircles(gray, cv2.HOUGH_GRADIENT, 1,
                                 (width / 12), param1=25, param2=80, minRadius=int(width / 6))
 
         num = 0
         if(circles is not None):
-            # print(len(circles[0]))
-
-            # print('------------------------------')
             for circle in circles[0]:
                 x = int(circle[0])
                 y = int(circle[1])
@@ -152,21 +132,9 @@ class positiveCap:
                         num = num+1
                         img = cv2.circle(img, (x, y), r, (0, 255, 0), 1, 8, 0)
 
-        # cv2.imshow(name, img)
-        # print("circle num is "+str(num))
         return num
 
     # 判断正反，圆的数量<=3即正面
     def judgePositive(self, img):
-        pil = Image.fromarray(img)
-        pil.save(str(self.i) + ".jpg", quality = 95)
-        # pil = Image.open(str(self.i) + ".jpg")
-        self.i = self.i + 1
-        # img = cv2.cvtColor(np.array(pil),cv2.COLOR_RGB2RGBA)
         num = self._proc(img)
-        return num <= 2
-
-if __name__ == "__main__":
-    image = Image.open("save.jpg")
-    IdentifyModel = IdentifyModel()
-    IdentifyModel.identify(image)
+        return num <= 3
