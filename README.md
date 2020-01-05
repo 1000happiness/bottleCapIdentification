@@ -38,6 +38,6 @@
     cd backend
     python3 main.py
     
- * 在main.py中编写了本地服务器的启动程序
+ 在main.py中编写了本地服务器的启动程序
     
 
