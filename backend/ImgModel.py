@@ -94,7 +94,6 @@ class ImgModel:
 
     def __SignImg(self, resultList):
         cvImg = cv2.cvtColor(np.array(self.pilImg),cv2.COLOR_RGBA2RGB)
-        # print(cvImg)
         for i in range(len(resultList)):
             square = np.array([resultList[i][2], resultList[i][1], resultList[i][0], resultList[i][3]], np.int32)
             square = square.reshape((-1,1,2))
@@ -120,7 +119,6 @@ class ImgModel:
         low = int (low * rate)
         high = int(high * rate)
         newnpImg = deepcopy(npImg[low: high,left: right])
-        print(low, high,left, right)
         identifyImg = Image.fromarray(newnpImg)
 
         return identifyImg, (low, high, left, right)
@@ -129,7 +127,6 @@ class ImgModel:
         cvImg = cv2.cvtColor(npImg, cv2.COLOR_RGB2GRAY)
         cvImg = cv2.medianBlur(cvImg, 11)
         cannyImg = cv2.Canny(cvImg, 5, 80)
-        Image.fromarray(cannyImg).save("A.jpg")
 
         col = []
         k = 0
@@ -149,8 +146,6 @@ class ImgModel:
                 k = k + colRange
             else:
                 k = k + colRange
-        print("col")
-        print(col)
         if(len(col) < 2):
             return 0, -1
         elif(len(col) == 2):
@@ -162,7 +157,6 @@ class ImgModel:
             colValue = np.zeros(len(col))
             gaussianImg = cv2.GaussianBlur(cvImg, (11,11), 3)
             gaussiancannyImg = cv2.Canny(gaussianImg, 5, 80)
-            Image.fromarray(gaussiancannyImg).save("B.jpg")
             for k in range(np.array(gaussiancannyImg).shape[1]):
                 left = 0
                 right = 1
@@ -224,9 +218,6 @@ class ImgModel:
             return row[0] - 2, row[1] + 2
         first = 0
         second = 1
-
-        print("row")
-        print(row)
         if(len(row) > 2):
             rowValue = np.zeros(len(row))
             gaussianImg = cv2.GaussianBlur(cvImg, (11,11), 3)
