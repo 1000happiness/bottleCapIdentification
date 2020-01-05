@@ -28,7 +28,7 @@
 # 运行
 ## 前端
 
-    cd front
+    cd frontend
     npm install
     npm start
   
